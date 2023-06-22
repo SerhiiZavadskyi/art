@@ -1,0 +1,24 @@
+<div class="maincontent feedback">
+    <h1>Recent Feedback</h1>
+
+    <div class="feedback-items">
+        <% feedback.forEach(item => { %>
+        <div class="feedback-item item-list media-list">
+            <div
+                class="feedback-item media d-flex justify-content-between align-items-center"
+            >
+                <div class="feedback-info media-body">
+                    <div class="feedback-head">
+                        <div class="feedback-title"><%= item.title %></div>
+                        <small>by <%= item.name %></small>
+                    </div>
+                    <div class="feedback-message"><%= item.message %></div>
+                </div>
+                <button class="btn btn-danger btn-sm" id="delete">
+                    Delete
+                </button>
+            </div>
+        </div>
+        <% }) %>
+    </div>
+</div>

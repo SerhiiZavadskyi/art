@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 const cookieSession = require('cookie-session');
+const httpErrors = require('http-errors');
+const bodyParser = require('body-parser');
 
 const FeedbackService = require('./services/FeedbackService');
 const SpeakerService = require('./services/SpeakerService');
@@ -20,6 +22,8 @@ app.use(
         keys: ['Start13'],
     })
 );
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, './views'));
 app.locals.siteName = 'Roux Meetups';
@@ -36,6 +40,16 @@ app.use(async (req, res, next) => {
 });
 
 app.use('/', routes({ feedbackService, speakerService }));
+
+app.use((req, res, next) => next(httpErrors(404, 'Page not found')));
+
+app.use((err, req, res, next) => {
+    const status = err.status || 500;
+    res.status(status);
+    if (err) {
+        res.render('error', { err });
+    }
+});
 
 app.listen(PORT, () => {
     console.log(`Express server is running on port ${PORT}`);
